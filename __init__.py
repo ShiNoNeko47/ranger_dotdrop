@@ -5,7 +5,7 @@ import yaml
 import ranger.api
 from ranger.core.linemode import LinemodeBase
 
-CHECKMARK = "  ✔"
+CHECKMARK = os.getenv("RANGER_DOTDROP_CHECKMARK", "  ✔")
 DOTDROP_CONFIG = os.getenv("DOTDROP_CONFIG", "")
 
 
@@ -16,6 +16,17 @@ if DOTDROP_CONFIG:
 files = [
     os.path.expanduser(config["dotfiles"][file]["dst"]) for file in config["dotfiles"]
 ]
+
+
+def add_files(files_new):
+    for file in files_new:
+        files.append(file)
+
+
+def remove_files(files_new):
+    for file in files_new:
+        if file in files:
+            files.remove(file)
 
 
 @ranger.api.register_linemode
